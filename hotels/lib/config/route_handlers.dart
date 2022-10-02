@@ -5,7 +5,7 @@ import '../components/home_component.dart';
 
 var homeHandler = Handler(
   handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-    return HomeView();
+    return MyHomePage();
   },
 );
 
