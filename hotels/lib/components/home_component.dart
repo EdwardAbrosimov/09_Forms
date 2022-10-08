@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const appTitle = 'Isolate Demo';
+    const appTitle = 'Hotels';
 
     return const MaterialApp(
       title: appTitle,
@@ -36,9 +36,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+// ignore: must_be_immutable
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final Future<List<HotelPreview>>? _hotels = fetchHotels(http.Client());
+  bool showGrid = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,27 +55,39 @@ class MyHomePage extends StatelessWidget {
           IconButton(
               icon: const Icon(Icons.list),
               tooltip: 'Display hotels in list',
-              onPressed: (() {})),
+              onPressed: (() {
+                setState(() {
+                  showGrid = false;
+                });
+              })),
           IconButton(
             icon: const Icon(Icons.grid_view),
             tooltip: 'Display hotels in grid',
-            onPressed: (() {}),
+            onPressed: (() {
+              setState(() {
+                showGrid = true;
+              });
+            }),
           )
         ],
       ),
       body: FutureBuilder<List<HotelPreview>>(
-        future: fetchHotels(http.Client()),
+        future: _hotels,
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text('An error has occurred!'),
-            );
-          } else if (snapshot.hasData) {
-            return HotelsList(hotels: snapshot.data!);
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              return const Center(child: Text('NONE'));
+            case ConnectionState.active:
+              return const Center(child: Text('ACTIVE'));
+            case ConnectionState.waiting:
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            case ConnectionState.done:
+              return HotelsList(
+                hotels: snapshot.data!,
+                gridView: showGrid,
+              );
           }
         },
       ),
@@ -76,30 +96,109 @@ class MyHomePage extends StatelessWidget {
 }
 
 class HotelsList extends StatelessWidget {
-  const HotelsList({super.key, required this.hotels});
+  const HotelsList({super.key, required this.hotels, required this.gridView});
 
+  final bool gridView;
   final List<HotelPreview> hotels;
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: gridView ? 2 : 1,
       ),
       itemCount: hotels.length,
       itemBuilder: (context, index) {
         return Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Image.asset(
-            'assets/images/${hotels[index].poster}',
-            fit: BoxFit.cover,
-          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          elevation: 5,
-          margin: EdgeInsets.all(10),
+          elevation: 8,
+          shadowColor: Colors.deepPurpleAccent,
+          margin: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Flexible(
+                flex: 2,
+                child: Image.asset(
+                  'assets/images/${hotels[index].poster}',
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Expanded(
+                  child: gridView
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Center(
+                                child: Text(
+                                  hotels[index].name,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: TextButton(
+                                style: ButtonStyle(
+                                  foregroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.white),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.deepPurple),
+                                ),
+                                onPressed: () {},
+                                child: const Text('Подробнее'),
+                              ),
+                            )
+                          ],
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                flex: 2,
+                                child: Text(
+                                  hotels[index].name,
+                                  style: const TextStyle(
+                                      fontSize: 24,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Flexible(
+                                flex: 1,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    foregroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.white),
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.deepPurple),
+                                  ),
+                                  onPressed: () {},
+                                  child: const Text('Подробнее'),
+                                ),
+                              )
+                            ],
+                          ),
+                        ))
+            ],
+          ),
         );
       },
     );
