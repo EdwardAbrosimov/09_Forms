@@ -1,6 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:hotels/config/route_handlers.dart';
+import './route_handlers.dart';
 
 class Routes {
   static String home = "/";
@@ -12,9 +12,9 @@ class Routes {
       debugPrint("Route was not found!!!");
       return;
     });
-    router.define(home, handler: homeHandler);
+    router.define(home,
+        handler: homeHandler, transitionType: TransitionType.fadeIn);
     router.define(about,
-        handler: aboutHandler,
-        transitionType: TransitionType.materialFullScreenDialog);
+        handler: aboutHandler, transitionType: TransitionType.inFromBottom);
   }
 }

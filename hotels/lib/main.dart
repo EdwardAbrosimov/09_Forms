@@ -1,6 +1,5 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:hotels/components/home_component.dart';
 import '../../config/routes.dart';
 
 void main() {

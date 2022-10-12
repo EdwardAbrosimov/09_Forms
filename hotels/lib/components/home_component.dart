@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hotels/config/route_handlers.dart';
+import 'package:hotels/config/routes.dart';
 import 'package:hotels/models/hotel.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,22 +20,6 @@ List<HotelPreview> parseHotels(String responseBody) {
   return parsed
       .map<HotelPreview>((json) => HotelPreview.fromJson(json))
       .toList();
-}
-
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    const appTitle = 'Hotels';
-
-    return const MaterialApp(
-      title: appTitle,
-      home: MyHomePage(),
-    );
-  }
 }
 
 // ignore: must_be_immutable
@@ -158,7 +144,11 @@ class HotelsList extends StatelessWidget {
                                       MaterialStateProperty.all<Color>(
                                           Colors.deepPurple),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.of(context).pushNamed(Routes.about,
+                                      arguments:
+                                          AboutArguments(hotels[index].uuid));
+                                },
                                 child: const Text('Подробнее'),
                               ),
                             )
@@ -190,7 +180,12 @@ class HotelsList extends StatelessWidget {
                                         MaterialStateProperty.all<Color>(
                                             Colors.deepPurple),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context).pushNamed(
+                                        Routes.about,
+                                        arguments:
+                                            AboutArguments(hotels[index].uuid));
+                                  },
                                   child: const Text('Подробнее'),
                                 ),
                               )

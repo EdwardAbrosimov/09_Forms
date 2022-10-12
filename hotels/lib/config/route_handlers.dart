@@ -5,11 +5,17 @@ import '../components/home_component.dart';
 
 var homeHandler = Handler(
   handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-    return MyHomePage();
+    return const MyHomePage();
   },
 );
 
-var aboutHandler =
-    Handler(handlerFunc: (BuildContext? context, Map<String, dynamic> params) {
-  return AboutView(params["uuid"][0]);
+class AboutArguments {
+  final String uuid;
+  AboutArguments(this.uuid);
+}
+
+var aboutHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+  final args = ModalRoute.of(context!)?.settings.arguments as AboutArguments;
+  return AboutPage(uuid: args.uuid);
 });
