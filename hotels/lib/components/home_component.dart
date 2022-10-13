@@ -8,18 +8,16 @@ import 'package:hotels/config/routes.dart';
 import 'package:hotels/models/hotel.dart';
 import 'package:http/http.dart' as http;
 
-Future<List<HotelPreview>> fetchHotels(http.Client client) async {
+Future<List<Preview>> fetchHotels(http.Client client) async {
   final response = await client.get(Uri.parse(
       'https://run.mocky.io/v3/ac888dc5-d193-4700-b12c-abb43e289301'));
   return compute(parseHotels, response.body);
 }
 
-List<HotelPreview> parseHotels(String responseBody) {
+List<Preview> parseHotels(String responseBody) {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
 
-  return parsed
-      .map<HotelPreview>((json) => HotelPreview.fromJson(json))
-      .toList();
+  return parsed.map<Preview>((json) => Preview.fromJson(json)).toList();
 }
 
 // ignore: must_be_immutable
@@ -31,7 +29,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final Future<List<HotelPreview>>? _hotels = fetchHotels(http.Client());
+  final Future<List<Preview>>? _hotels = fetchHotels(http.Client());
   bool showGrid = false;
   @override
   Widget build(BuildContext context) {
@@ -57,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
-      body: FutureBuilder<List<HotelPreview>>(
+      body: FutureBuilder<List<Preview>>(
         future: _hotels,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
@@ -85,7 +83,7 @@ class HotelsList extends StatelessWidget {
   const HotelsList({super.key, required this.hotels, required this.gridView});
 
   final bool gridView;
-  final List<HotelPreview> hotels;
+  final List<Preview> hotels;
 
   @override
   Widget build(BuildContext context) {
