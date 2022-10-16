@@ -4,16 +4,17 @@ part 'hotel.g.dart';
 
 @JsonSerializable()
 class HotelInfo {
-  final Preview preview;
-  final Adress adress;
-  final double price;
-  final double rating;
+  final String uuid, name, poster;
+  final Address address;
+  final double price, rating;
   final Services services;
   final List<String> photos;
 
   HotelInfo(
-      {required this.preview,
-      required this.adress,
+      {required this.uuid,
+      required this.name,
+      required this.poster,
+      required this.address,
       required this.price,
       required this.rating,
       required this.services,
@@ -28,25 +29,28 @@ class HotelInfo {
 class Preview {
   final String uuid, name, poster;
   Preview({required this.uuid, required this.name, required this.poster});
+
   factory Preview.fromJson(Map<String, dynamic> json) =>
       _$PreviewFromJson(json);
   Map<String, dynamic> toJson() => _$PreviewToJson(this);
 }
 
 @JsonSerializable()
-class Adress {
+class Address {
   final String country, street, city;
+  @JsonKey(name: 'zip_code')
   final int zipCode;
   final Coords coords;
 
-  Adress(
+  Address(
       {required this.country,
       required this.street,
       required this.city,
       required this.zipCode,
       required this.coords});
-  factory Adress.fromJson(Map<String, dynamic> json) => _$AdressFromJson(json);
-  Map<String, dynamic> toJson() => _$AdressToJson(this);
+  factory Address.fromJson(Map<String, dynamic> json) =>
+      _$AddressFromJson(json);
+  Map<String, dynamic> toJson() => _$AddressToJson(this);
 }
 
 @JsonSerializable()

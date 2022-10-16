@@ -7,8 +7,10 @@ part of 'hotel.dart';
 // **************************************************************************
 
 HotelInfo _$HotelInfoFromJson(Map<String, dynamic> json) => HotelInfo(
-      preview: Preview.fromJson(json['preview'] as Map<String, dynamic>),
-      adress: Adress.fromJson(json['adress'] as Map<String, dynamic>),
+      uuid: json['uuid'] as String,
+      name: json['name'] as String,
+      poster: json['poster'] as String,
+      address: Address.fromJson(json['address'] as Map<String, dynamic>),
       price: (json['price'] as num).toDouble(),
       rating: (json['rating'] as num).toDouble(),
       services: Services.fromJson(json['services'] as Map<String, dynamic>),
@@ -17,8 +19,10 @@ HotelInfo _$HotelInfoFromJson(Map<String, dynamic> json) => HotelInfo(
     );
 
 Map<String, dynamic> _$HotelInfoToJson(HotelInfo instance) => <String, dynamic>{
-      'preview': instance.preview,
-      'adress': instance.adress,
+      'uuid': instance.uuid,
+      'name': instance.name,
+      'poster': instance.poster,
+      'address': instance.address,
       'price': instance.price,
       'rating': instance.rating,
       'services': instance.services,
@@ -37,19 +41,19 @@ Map<String, dynamic> _$PreviewToJson(Preview instance) => <String, dynamic>{
       'poster': instance.poster,
     };
 
-Adress _$AdressFromJson(Map<String, dynamic> json) => Adress(
+Address _$AddressFromJson(Map<String, dynamic> json) => Address(
       country: json['country'] as String,
       street: json['street'] as String,
       city: json['city'] as String,
-      zipCode: json['zipCode'] as int,
+      zipCode: json['zip_code'] as int,
       coords: Coords.fromJson(json['coords'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$AdressToJson(Adress instance) => <String, dynamic>{
+Map<String, dynamic> _$AddressToJson(Address instance) => <String, dynamic>{
       'country': instance.country,
       'street': instance.street,
       'city': instance.city,
-      'zipCode': instance.zipCode,
+      'zip_code': instance.zipCode,
       'coords': instance.coords,
     };
 
