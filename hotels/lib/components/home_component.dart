@@ -16,7 +16,6 @@ Future<List<Preview>> fetchHotels(http.Client client) async {
 
 List<Preview> parseHotels(String responseBody) {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-
   return parsed.map<Preview>((json) => Preview.fromJson(json)).toList();
 }
 
@@ -68,10 +67,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: CircularProgressIndicator(),
               );
             case ConnectionState.done:
-              return HotelsList(
-                hotels: snapshot.data!,
-                gridView: showGrid,
-              );
+              if (snapshot.data != null) {
+                return HotelsList(
+                  hotels: snapshot.data!,
+                  gridView: showGrid,
+                );
+              } else {
+                return const Center(child: Text('Сервер временно не доступен'));
+              }
           }
         },
       ),
