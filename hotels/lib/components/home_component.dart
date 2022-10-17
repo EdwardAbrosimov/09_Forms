@@ -100,11 +100,11 @@ class HotelsList extends StatelessWidget {
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(8.0),
           ),
           elevation: 8,
           shadowColor: Colors.deepPurpleAccent,
-          margin: const EdgeInsets.all(10),
+          margin: const EdgeInsets.all(8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.stretch,
