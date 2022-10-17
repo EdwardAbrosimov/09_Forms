@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:hotels/models/hotel.dart';
 import 'package:dio/dio.dart';
@@ -16,6 +17,9 @@ class _AboutPageState extends State<AboutPage> {
   String errorString = '';
   int errorCode = 404;
   final Dio _dio = Dio();
+  int _currentImage = 0;
+  final CarouselController _controller = CarouselController();
+
   @override
   void initState() {
     gethotelInfo(widget.uuid);
@@ -54,6 +58,69 @@ class _AboutPageState extends State<AboutPage> {
                 : Text(_hotel.name),
         centerTitle: true,
       ),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : hasError
+              ? Center(
+                  child: Text(errorString),
+                )
+              : Column(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: CarouselSlider(
+                        items: _hotel.photos
+                            .map((item) => Container(
+                                  margin: const EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(8.0)),
+                                    child: Image.asset(
+                                      'assets/images/$item',
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        carouselController: _controller,
+                        options: CarouselOptions(
+                          autoPlay: true,
+                          aspectRatio: 2.0,
+                          enlargeCenterPage: true,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _currentImage = index;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: _hotel.photos.asMap().entries.map((entry) {
+                        return GestureDetector(
+                          onTap: () => _controller.animateToPage(entry.key),
+                          child: Container(
+                            width: 16.0,
+                            height: 16.0,
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 4.0),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: (Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.purple
+                                        : Colors.deepPurple)
+                                    .withOpacity(_currentImage == entry.key
+                                        ? 0.9
+                                        : 0.4)),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
     );
   }
 }
