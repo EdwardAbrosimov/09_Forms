@@ -67,9 +67,10 @@ class _AboutPageState extends State<AboutPage> {
               : Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
-                        flex: 2,
+                        flex: 3,
                         child: CarouselSlider(
                           items: _hotel.photos
                               .map((item) => Container(
@@ -98,167 +99,236 @@ class _AboutPageState extends State<AboutPage> {
                           ),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: _hotel.photos.asMap().entries.map((entry) {
-                          return GestureDetector(
-                            onTap: () => _controller.animateToPage(entry.key),
-                            child: Container(
-                              width: 16.0,
-                              height: 16.0,
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 4.0),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: (Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? Colors.purple
-                                          : Colors.deepPurple)
-                                      .withOpacity(_currentImage == entry.key
-                                          ? 0.9
-                                          : 0.4)),
-                            ),
-                          );
-                        }).toList(),
+                      Expanded(
+                        flex: 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: _hotel.photos.asMap().entries.map((entry) {
+                            return GestureDetector(
+                              onTap: () => _controller.animateToPage(entry.key),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width <= 300
+                                    ? 8
+                                    : 16.0,
+                                height: MediaQuery.of(context).size.width <= 300
+                                    ? 8
+                                    : 16.0,
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 4.0),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: (Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.purple
+                                            : Colors.deepPurple)
+                                        .withOpacity(_currentImage == entry.key
+                                            ? 0.9
+                                            : 0.4)),
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ),
                       Expanded(
                         flex: 2,
-                        child: Card(
-                          semanticContainer: true,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          elevation: 4,
-                          shadowColor: Colors.deepPurpleAccent,
-                          margin: const EdgeInsets.all(8),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  const Text('Основная информация'),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const Text('Страна:'),
-                                      Text(_hotel.address.country)
-                                    ],
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Card(
+                                semanticContainer: true,
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                elevation: 4,
+                                shadowColor: Colors.deepPurpleAccent,
+                                margin: const EdgeInsets.all(8),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text('Основная информация',
+                                            style: TextStyle(
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold)),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const Text('Страна:'),
+                                                const SizedBox(width: 20),
+                                                Text(_hotel.address.country,
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold))
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const Text('Город:'),
+                                                const SizedBox(width: 20),
+                                                Text(_hotel.address.city,
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold))
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const Text('Улица:'),
+                                                const SizedBox(width: 20),
+                                                Text(_hotel.address.street,
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold))
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const Text('Рейтинг:'),
+                                                const SizedBox(width: 20),
+                                                Text(_hotel.rating.toString(),
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold))
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const Text('Город:'),
-                                      Text(_hotel.address.city)
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const Text('Улица:'),
-                                      Text(_hotel.address.street)
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const Text('Рейтинг:'),
-                                      Text(_hotel.rating.toString())
-                                    ],
-                                  )
-                                ]),
-                          ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Expanded(
                         flex: 3,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Expanded(
-                              child: Card(
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                elevation: 8,
-                                shadowColor: Colors.deepPurpleAccent,
-                                margin: const EdgeInsets.all(8),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      const Text('Бесплатные'),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Column(
+                              child: SizedBox(
+                                height: 200,
+                                child: Card(
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  elevation: 8,
+                                  shadowColor: Colors.deepPurpleAccent,
+                                  margin: const EdgeInsets.all(8),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children:
-                                            _hotel.services.free.map((service) {
-                                          return Row(children: [
-                                            const Text("\u2022"),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              service,
-                                            )
-                                          ]);
-                                        }).toList(),
-                                      )
-                                    ],
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const Text('Бесплатные',
+                                              style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold)),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: _hotel.services.free
+                                                .map((service) {
+                                              return Row(children: [
+                                                const Text("\u2022"),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    service,
+                                                  ),
+                                                )
+                                              ]);
+                                            }).toList(),
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             Expanded(
-                              child: Card(
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                elevation: 8,
-                                shadowColor: Colors.deepPurpleAccent,
-                                margin: const EdgeInsets.all(8),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      const Text('Платные'),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Column(
+                              child: SizedBox(
+                                height: 200,
+                                child: Card(
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  elevation: 8,
+                                  shadowColor: Colors.deepPurpleAccent,
+                                  margin: const EdgeInsets.all(8),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SingleChildScrollView(
+                                      child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children:
-                                            _hotel.services.paid.map((service) {
-                                          return Row(children: [
-                                            const Text("\u2022"),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              service,
-                                            )
-                                          ]);
-                                        }).toList(),
-                                      )
-                                    ],
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const Text('Платные',
+                                              style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold)),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: _hotel.services.paid
+                                                .map((service) {
+                                              return Row(children: [
+                                                const Text("\u2022"),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    service,
+                                                  ),
+                                                )
+                                              ]);
+                                            }).toList(),
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             )
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

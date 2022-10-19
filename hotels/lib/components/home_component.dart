@@ -117,26 +117,62 @@ class HotelsList extends StatelessWidget {
                 ),
               ),
               Expanded(
-                  child: gridView
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: Center(
-                                child: Text(
-                                  hotels[index].name,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.bold),
-                                ),
+                child: gridView
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Center(
+                              child: Text(
+                                hotels[index].name,
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
-                            Expanded(
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: TextButton(
+                              style: ButtonStyle(
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.deepPurple),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pushNamed(Routes.about,
+                                    arguments:
+                                        AboutArguments(hotels[index].uuid));
+                              },
+                              child: const Text('Подробнее'),
+                            ),
+                          )
+                        ],
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              flex: 2,
+                              child: Text(
+                                hotels[index].name,
+                                style: const TextStyle(
+                                    fontSize: 24,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Flexible(
                               flex: 1,
-                              child: TextButton(
+                              child: ElevatedButton(
                                 style: ButtonStyle(
                                   foregroundColor:
                                       MaterialStateProperty.all<Color>(
@@ -154,45 +190,9 @@ class HotelsList extends StatelessWidget {
                               ),
                             )
                           ],
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                flex: 2,
-                                child: Text(
-                                  hotels[index].name,
-                                  style: const TextStyle(
-                                      fontSize: 24,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Flexible(
-                                flex: 1,
-                                child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    foregroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Colors.white),
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Colors.deepPurple),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pushNamed(
-                                        Routes.about,
-                                        arguments:
-                                            AboutArguments(hotels[index].uuid));
-                                  },
-                                  child: const Text('Подробнее'),
-                                ),
-                              )
-                            ],
-                          ),
-                        ))
+                        ),
+                      ),
+              )
             ],
           ),
         );
